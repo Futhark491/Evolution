@@ -5,7 +5,7 @@ using UnityEngine;
 public class UpdateSpecies : MonoBehaviour {
 
     public GameObject speciesObject;
-    public GameObject Ice;
+    private static int DIMENSION = 10;
 
     // Use this for initialization
     public void GenerateSpecies()
@@ -22,30 +22,91 @@ public class UpdateSpecies : MonoBehaviour {
     private void Spawn()
     {
         var rnd = new System.Random();
+        int locX = 0;
+        int locY = 0;
+        Species speciesScript = speciesObject.GetComponent<Species>();
+        List<Vector2Int> lctn = new List<Vector2Int>();
+        // Web speciesWeb = speciesObject.GetComponent<Web>();
         for (int i = 0; i < 10; i++)
         {
-            int locX = rnd.Next(-100, 100);
-            int locY = rnd.Next(-100, 100);
-            float width = Ice.transform.lossyScale.x;
-            float height = Ice.transform.lossyScale.y;
-            Instantiate(speciesObject, new Vector2(width * locX, height * locY), Quaternion.identity);
-            Species speciesScript = speciesObject.GetComponent<Species>();
+            locX = rnd.Next(0, 100);
+            locY = rnd.Next(0, 100);
+            Instantiate(speciesObject, new Vector2(DIMENSION * locX, DIMENSION * locY), Quaternion.identity);
             // set parameters
-            speciesScript.Init(i.ToString(), new List<Vector2Int>(), new List<int>(), new List<int>(), 0, 0, 0, 0, 0, 0, 0, 0);
+            lctn.Add( new Vector2Int((DIMENSION * locX), DIMENSION * locY) );
+            List<int> gns = new List<int>();
+            //for (int j = 0; j < 11; j++)
+            //{
+            //    gns.Add(j);
+            //    speciesScript.evolve(true, j);
+            //}
+            // get herbivore food source (web function)
+            // get carnivore food source (web function)
+            // get amount calories (web function)
+            // get creature size (web function)
+            // get max per tile (web function)
+            // get litter size (web function)
+            // get mate frequency (web function)
+            // get mate attachment (web function)
+            // get pecking order (web function)
+            speciesScript.Init(i.ToString(), lctn, gns, new int[0], 0, 0, 0, 0, 0, 0, 0, 0);
         }
     }
 
     /*
-     *  Have the species in each tile evolve
+     *  Parent Species will be copied into new speciesObject (mutatingSpecies) that will evolve once
      */
-    public void Mutation()
+    private void Mutation(Species parentSpecies, bool isPlayer)
     {
+        int newName = int.Parse(parentSpecies.getSpeciesName()) + 100;  //  100 should be replaced by number of existing speciesObjects
+        Species mutatingSpecies = new Species(newName.ToString());
+        mutatingSpecies.clone(parentSpecies);
+        bool addNode;
+        int nodeIndex;
+        if (!isPlayer)
+        {
+            addNode = true; //  may change this later on to allow bots to change both ways
+            //  nodeIndex set to random node
+        }
+        else
+        {
+            //  have player set addNode to true/false
+            //  have player choose node
+        }
+        //  mutatingSpecies.evolve(addNode, nodeIndex);
+        //  mutatingSpecies = speciesObject.GetComponent<Species>();
+        //  Instantiate(speciesObject, new Vector2(DIMENSION * locX, DIMENSION * locY), Quaternion.identity);
+    }
+
+    /*
+     *  Have the species in a given tile migrate to adjacent tile
+     */
+    private void Overpopulation(Species migratingSpecies, bool isPlayer, int tileIndex)
+    {
+        //  overPopulatedTile = Tile @ tileIndex
+        //  Tile[] adjacentTiles;
+        //  add all adjacent tiles to adjacentTiles[]
+        //  Tile selectedTile;
+        //  int movingPopulation = 0;
+        /*  if (!isPlayer)
+         *  {
+         *      selectedTile = randomly choose adjacent tile
+         *  }
+         *  else
+         *  {
+         *      selectedTile = player chooses adjacent tile
+         *  }
+         *      movingPopulation = 0.3 * overPopulatedTile.getPopulation(migratingSpecies);
+         *      overPopulatedTile.setPopulation(migratingSpecies) = 0.7 * overPopulatedTile.getPopulation(migratingSpecies);
+         *      selectedTile.addSpecies(migratingSpecies);
+         *      selectedTile.setPopulation(migratingSpecies) = movingPopulation;
+         */
     }
 
     /*
      *  Have the species in each tile containing species eat
      */
-    public void Interact()
+    private void Interact()
     {
         HerbivoreMove();
         CarnivoreMove();
@@ -54,25 +115,56 @@ public class UpdateSpecies : MonoBehaviour {
     /*
      *  Have the species in each tile reproduce
      */
-    public void Reproduce()
+    private void Reproduce()
     {
-        print("reproduce");
-        // have species mate
+        //  int[] validTiles = 'tiles who have species in them'
+        //  int[] localSpecies = 'species in valid tile';
+        //  for each species in valid tile, species.getMaxPerTile()
+        //  for each species in valid tile, species.getLitterSize()
+        //  for each species in valid tile, species.getMatingFrequency()
+        //  for each species in valid tile, species.getMateAttachment()
+        //  call mutation based on mutation chance * number of offspring
+        //  if population of local species > maxPerTile, Overpopulation()
     }
 
     /*
      *  Have the herbivore species in each tile containing species eat tile resources
      */
-    public void HerbivoreMove()
+    private void HerbivoreMove()
     {
-        print("herbivore");
+        //  int[] validTiles = 'tiles who have herbivores in them'
+        //  for each valid tile, get herbivore food sources (tile gets)
+        //  for each species in valid tile, species.getHFS()
+        //  int[] localSpecies = 'species in valid tile';
+        /*  for (int i = 0; i < localSpecies.Length; i++) {
+         *      for (int j = 0; j < 4; j++) {
+         *          berriesInTile - ( localSpecies[i].getHFS(j) * localSpecies[i].getAmntCalories() );
+         *          nutsInTile - ( localSpecies[i].getHFS(j) * localSpecies[i].getAmntCalories() );
+         *          grassInTile - ( localSpecies[i].getHFS(j) * localSpecies[i].getAmntCalories() );
+         *          leavesInTile - ( localSpecies[i].getHFS(j) * localSpecies[i].getAmntCalories() );
+         *      }
+         *  }
+         */
     }
 
     /*
      *  Have the carnivore species in each tile containing species eat other species and tiny species (tile resource)
      */
-    public void CarnivoreMove()
+    private void CarnivoreMove()
     {
-        print("carnivore");
+        //  int[] validTiles = 'tiles who have carnivores in them'
+        //  for each valid tile, get carnivore food sources (tile gets)
+        //  for each species in valid tile, species.getCFS()
+        //  int[] localSpecies = 'species in valid tile';
+        /*  for (int i = 0; i < localSpecies.Length; i++) {
+         *      for (int j = 0; j < 5; j++) {
+         *          ambientInTile - ( localSpecies[i].getCFS(j) * localSpecies[i].getAmntCalories() );
+         *          smallInTile - ( localSpecies[i].getCFS(j) * localSpecies[i].getAmntCalories() );
+         *          mediumInTile - ( localSpecies[i].getCFS(j) * localSpecies[i].getAmntCalories() );
+         *          largeInTile - ( localSpecies[i].getCFS(j) * localSpecies[i].getAmntCalories() );
+         *          humongousInTile - ( localSpecies[i].getCFS(j) * localSpecies[i].getAmntCalories() );
+         *      }
+         *  }
+         */
     }
 }
