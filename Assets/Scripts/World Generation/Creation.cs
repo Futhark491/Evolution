@@ -13,13 +13,17 @@ public class Creation : MonoBehaviour {
 	void Start () {
         temperature = Random.Range(mintemperature, maxtemperature);
         height = Random.Range(minheight, maxtemperature);
-       //print(temperature);
+        //print(temperature);
 
         
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	bool is_Ocean()
+    {
+        if (minheight == maxheight)
+        { return true; }
+        else
+            return false;
+    }
 }
