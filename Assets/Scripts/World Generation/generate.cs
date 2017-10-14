@@ -31,6 +31,8 @@ public class generate : MonoBehaviour
         string[] tileType = { "Ocean", "Desert", "Plains", "Forest", "Tundra" };
         Color[] tileColors = { new Color(18f / 255f, 15f / 255f, 62f / 255f, 255f / 255f), new Color(197f / 255f, 183f / 255f, 68f / 255f, 255f / 255f),
                                new Color(60f/255f,242f/255f,2f/255f,255f/255f), new Color(0f/255f,143f/255f,48f/255f,255f/255f), new Color(67f/255f,186f/255f,203f/255f,255f/255f) };
+        Vector2Int[] Height = { new Vector2Int(0, 0), new Vector2Int(0, 20), new Vector2Int(20, 40), new Vector2Int(40, 70), new Vector2Int(20, 100) };
+        Vector2Int[] Temperature = { new Vector2Int(0, 0), new Vector2Int(80, 120), new Vector2Int(60, 90), new Vector2Int(30, 90), new Vector2Int(-30, 30), };
         int numBerries = 0;
         int numNuts = 0;
         int numGrass = 0;
@@ -69,6 +71,7 @@ public class generate : MonoBehaviour
                 {
                     numAmbientMeat = 100;
                 }
+
                 else if (rand == 1)  // Desert
                 {
                     numBerries = 10;
@@ -76,6 +79,7 @@ public class generate : MonoBehaviour
                     numLeaves = 10;
                     numAmbientMeat = 200;
                 }
+
                 else if (rand == 2)  // Plains
                 {
                     numBerries = 50;
@@ -84,6 +88,7 @@ public class generate : MonoBehaviour
                     numLeaves = 100;
                     numAmbientMeat = 150;
                 }
+
                 else if (rand == 3)  // Forest
                 {
                     numBerries = 1000;
@@ -92,6 +97,7 @@ public class generate : MonoBehaviour
                     numLeaves = 2000;
                     numAmbientMeat = 500;
                 }
+
                 else if (rand == 4)  // Tundra
                 {
                     numBerries = 50;
@@ -100,17 +106,19 @@ public class generate : MonoBehaviour
                     numLeaves = 10;
                     numAmbientMeat = 200;
                 }
-                
+               
                 instanceData.setNumBerries(numBerries);
                 instanceData.setNumNuts(numNuts);
                 instanceData.setNumGrass(numGrass);
                 instanceData.setNumLeaves(numLeaves);
                 instanceData.setNumAmbientMeat(numAmbientMeat);
+                instanceData.setHeight(Random.Range(Height[rand].x, Height[rand].y));
+                instanceData.setTemp(Random.Range(Temperature[rand].x, Temperature[rand].y));
                 tileInstance.GetComponent<SpriteRenderer>().color = tileColors[rand];
-
                 tileList.setTileAtLocation(new Vector2Int(i,j),tileInstance);
+                
             }
-
+       
         }
 
     }

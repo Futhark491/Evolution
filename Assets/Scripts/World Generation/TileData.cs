@@ -9,6 +9,8 @@ public class TileData:MonoBehaviour {
     private int numLeaves;
     private int numAmbientMeat;
     private string tileType;
+    private int height;
+    private int temp;
 
     public TileData()
     {
@@ -18,6 +20,9 @@ public class TileData:MonoBehaviour {
         numGrass = 0;
         numLeaves = 0;
         numAmbientMeat = 0;
+        height = 0;
+        temp = 0;
+
     }
 
     public string getTileType()
@@ -44,6 +49,14 @@ public class TileData:MonoBehaviour {
     {
         return numAmbientMeat;
     }
+    public int getHeight()
+    {
+        return height;
+    }
+    public int getTemp()
+    {
+        return temp;
+    }
 
     public void setTileType(string tileType)
     {
@@ -68,5 +81,13 @@ public class TileData:MonoBehaviour {
     public void setNumAmbientMeat(int numAmbientMeat)
     {
         this.numAmbientMeat = numAmbientMeat;
+    }
+    public void setHeight(int height)
+    {
+        this.height = height;
+    }
+    public void setTemp(int temp)
+    {
+        this.temp = temp;
     }
 }
